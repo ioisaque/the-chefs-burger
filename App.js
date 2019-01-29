@@ -1,23 +1,21 @@
 // Arquivos das telas
-import Login from './screens/Login'
-import Logout from './screens/Logout'
 import Cardapio from './screens/Cardapio'
 import Categorias from './screens/Categorias'
 import Historico from './screens/Historico'
+import Produto from './screens/Produto'
 
 import { createStackNavigator } from 'react-navigation'
 import commonStyles from './assets/styles/commonStyles';
 
 const navigator = createStackNavigator (
   {
-    Login: Login,
-    Logout: Logout,
-    Cardapio: Cardapio,
     Categorias: Categorias,
+    Cardapio: Cardapio,    
+    Produto: Produto,
     Historico: Historico,
   },
   {
-    initialRouteName: 'Cardapio',
+    initialRouteName: 'Categorias',
     /* The header config from HomeScreen is now here */
     navigationOptions: {      
       headerBackTitle: '',
@@ -37,30 +35,9 @@ const navigator = createStackNavigator (
 )
 
 export const globalState = {
-  
-  navBar: {
-    firstLink: {
-      screen: 'Logout',
-      state: 0,
-      icon: 'power',
-      title: 'Sair'
-    },
-    secondLink: {
-      screen: 'Cardapio',
-      state: 1,
-      icon: 'alarm',
-      title: 'Histórico'
-    },
-    thirdLink: {
-      screen: 'Dias',
-      state: 0,
-      icon: 'basket',
-      title: 'Carrinho'
-    },
-    navigation: null
-  },
-    
+
   usuario: {
+    carrinho: false,
     historico: [{
       produtos: [
           {
@@ -91,6 +68,7 @@ export const globalState = {
   cardapio:{
     categorias: [],
     items: [],
+    selectedItem: {},
     selectedGroupID: "5"
   },
 }

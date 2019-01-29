@@ -7,6 +7,7 @@ export default {
     white: '#FFF',
     lightGrey: '#9e9e9e',
     darkGrey: '#484848',
+    almostTransparent: '#dedede36',
     
     //Bootstrap
     danger: '#e3000f',
