@@ -28,6 +28,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: commonStyles.colors.primary
   },
+  tabButtonUnique: {
+    width: '100%',
+    margin: 0,
+    padding: 15,
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    backgroundColor: commonStyles.colors.success
+  },
   tabButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -109,7 +120,6 @@ export default StyleSheet.create({
   },
   pageBody: {
     flex: 5,
-    padding: 5,
   },
   profilePic: {
     width: 50,
@@ -191,9 +201,8 @@ export default StyleSheet.create({
   },  
   inlineItemInfo: {
     fontSize: 18,
-    color: commonStyles.colors.primary
+    color: commonStyles.colors.secondary
   },
-
   inlineItemRemoveText: {
     fontSize: 18,
     marginLeft: 7.5,
@@ -206,6 +215,12 @@ export default StyleSheet.create({
     height: 1,
     width: '100%',
     backgroundColor: commonStyles.colors.primary,
+  },
+  inlineTextInput: {
+    width: '100%',
+    height: 50,
+    fontSize: 20,
+    color: commonStyles.colors.secondary
   },
   //////////////////////////////////////////////// END OFCOMPONENTS ////////////////////////////////////////////////
 });

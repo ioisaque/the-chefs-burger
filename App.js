@@ -4,6 +4,7 @@ import Categorias from './screens/Categorias'
 import Historico from './screens/Historico'
 import Produto from './screens/Produto'
 import Carrinho from './screens/Carrinho'
+import Finalizar from './screens/Finalizar'
 
 import { createStackNavigator } from 'react-navigation'
 import commonStyles from './assets/styles/commonStyles';
@@ -14,6 +15,7 @@ const navigator = createStackNavigator (
     Cardapio: Cardapio,    
     Produto: Produto,
     Carrinho: Carrinho,
+    Finalizar: Finalizar,
     Historico: Historico,
   },
   {

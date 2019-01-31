@@ -74,8 +74,8 @@ export default class Cardapio extends Component{
                     <View style={styles.lineContainer} marginBottom={0}>
                         <Text style={styles.inlineItemInfo} textAlign={'center'}>Observação</Text>
                     </View>
-                    <View style={styles.lineContainer} justifyContent={'space-between'}>
-                        <TextInput style={styles.inlineItemInfo} placeholder={'Se desejar adicione algo aqui...'}/>
+                    <View style={styles.lineContainer}>
+                        <TextInput style={styles.inlineItemInfo} multiline={true} onChangeText={text => this.setState({itemObs: text})} placeholder={'Se desejar adicione algo aqui...'}/>
                     </View>
                 </ScrollView>
 

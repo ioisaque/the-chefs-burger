@@ -11,7 +11,7 @@ export default props => {
             <View style={styles.lineContainer} justifyContent={'space-between'} marginBottom={0}>
                 <View style={styles.componenteItemLeft}>
                     <Text style={styles.inlineItemTitle}>{props.qtd +'x '+ props.nome}</Text>
-                    {props.observacao ? <Text style={styles.info}>{props.observacao}</Text> : null}
+                    {props.observacao ? <Text style={styles.inlineItemInfo}>{props.observacao}</Text> : null}
                 </View>
                 <View style={styles.componenteItemRight}>
                     <Text style={styles.inlineItemPrice}>{floatToReais(props.valor_total)}</Text>

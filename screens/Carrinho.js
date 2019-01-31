@@ -79,17 +79,19 @@ export default class Carrinho extends Component{
 
     removeItemOfCarrinho = (item) => {
         this.setState({listIsLoading: true})
-        console.log('\n|##################################################################|\n')
-        console.log(' ==> LISTA: \n\n', globalState.usuario.carrinho.items)
-        console.log('\n|##################################################################|\n')
-        console.log(' ==> ITEM A REMOVER: \n\n', item)
-        console.log('\n|##################################################################|\n')
 
         const newList = globalState.usuario.carrinho.items.filter(i => i.id != item.id)
         globalState.usuario.carrinho.items = newList
 
         globalState.usuario.carrinho.valor_total = globalState.usuario.carrinho.valor_total - item.valor_total
         this.setState({listIsLoading: false})
+
+        if(!newList.length)
+        {
+            globalState.usuario.carrinho.valor_total = 0
+            const { navigate } = this.props.navigation
+            navigate('Categorias')
+        }
     }
 }
 
