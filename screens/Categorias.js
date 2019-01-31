@@ -30,7 +30,7 @@ export default class Cardapio extends Component{
     }  
 
     render () {     
-      console.log('#=> Navigated to Categorias [HOME].')
+      //console.log('#=> Navigated to HOME.')
       const { navigate } = this.props.navigation;
 
       if (this.state.isLoading == true) {
@@ -76,19 +76,19 @@ export default class Cardapio extends Component{
                 <TouchableOpacity style={styles.refreshButton} onPress={this.refreshList}>
                   <Icon name="refresh" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.usuario.historico ? navigate('Historico') : Alert.alert('Histórico vazio.')}>
+                <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.usuario.historico.length ? navigate('Historico') : Alert.alert('Histórico vazio.')}>
                   <Icon name="history" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() =>  globalState.usuario.carrinho ? navigate('Carrinho') : Alert.alert('Carrinho vazio.')}>
+                <TouchableOpacity style={styles.refreshButton} onPress={() =>  globalState.usuario.carrinho.items.length ? navigate('Carrinho') : Alert.alert('Carrinho vazio.')}>
                   <Icon name="shopping-basket" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
               </View>
             </View>
 
           <View style={styles.pageBody}>
-            <FlatList data={globalState.cardapio.categorias}
+            <FlatList data={globalState.cardapio.categorias.filter(item => item.grupo != 'TAXAS')}
               extraData={this.state}
-              keyExtractor={item => `${item.id_aula}`}
+              keyExtractor={item => `${item.id}`}
               renderItem={({ item }) => <TouchableOpacity onPress={ () => this.selectCategoria(item) }><ItemCategoria {...item}/></TouchableOpacity>}
             />
           </View>
@@ -98,9 +98,9 @@ export default class Cardapio extends Component{
     }
 
     selectCategoria = (item) => {
-      console.log('RUNNING => @selectCategoria()')
+      console.log('RUNNING => @selectCategoria => ', item.grupo)
 
-      globalState.cardapio.selectedGroupID = item.id
+      globalState.cardapio.selectedGroup = item
 
       const { navigate } = this.props.navigation;
       navigate('Cardapio')
@@ -114,9 +114,9 @@ export default class Cardapio extends Component{
     }
 
     _UpdateCategories = (result) => {
-      console.log('UPDATED => #globalState.cardapio.categorias')
       globalState.cardapio.categorias = result
 
+      console.log('UPDATED => #globalState.cardapio.categorias')
       this.setState({isLoading: false})
     }
 };

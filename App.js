@@ -3,6 +3,7 @@ import Cardapio from './screens/Cardapio'
 import Categorias from './screens/Categorias'
 import Historico from './screens/Historico'
 import Produto from './screens/Produto'
+import Carrinho from './screens/Carrinho'
 
 import { createStackNavigator } from 'react-navigation'
 import commonStyles from './assets/styles/commonStyles';
@@ -12,6 +13,7 @@ const navigator = createStackNavigator (
     Categorias: Categorias,
     Cardapio: Cardapio,    
     Produto: Produto,
+    Carrinho: Carrinho,
     Historico: Historico,
   },
   {
@@ -37,38 +39,19 @@ const navigator = createStackNavigator (
 export const globalState = {
 
   usuario: {
-    carrinho: false,
-    historico: [{
-      produtos: [
-          {
-              id_produto: "83",
-              valor: "2",
-              quantidade: "1",
-              observacao: ""
-          },
-          {
-              id_produto: "85",
-              valor: "5",
-              quantidade: "1",
-              observacao: ""
-          }
-      ],
-      nome: "Icaro",
-      telefone: "31973095195",
-      endereco: "Av Gerasa",
-      numero: "2602",
-      complemento: "Casa",
-      bairro: "Bethânia",
-      cidade: "Ipatinga",
-      pagamento: "Dinheiro",
-      datahora: "2018-11-27 08:10"
-    }]
+    carrinho: {
+      items: [],
+      valor_total: 0
+    },
+    historico: []
   },
 
   cardapio:{
     categorias: [],
     items: [],
-    selectedItem: {},
+    selectedItem: {
+      imagem: '../assets/logo-bg.png'
+    },
     selectedGroupID: "5"
   },
 }

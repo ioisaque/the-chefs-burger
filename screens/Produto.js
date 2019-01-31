@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity } from 'react-native'
 
+import '../lib/auxFunctions'
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
 import commonStyles from '../assets/styles/commonStyles'
@@ -21,18 +22,18 @@ export default class Cardapio extends Component{
       this.state = {
         itemQTD: globalState.cardapio.selectedItem.qtd,
         itemTotal: globalState.cardapio.selectedItem.valor,
-        itemDesc: ''
+        itemObs: ''
       }
     }
 
     render () {     
-      console.log('#=> Navigated to Cardapio.')
+      //console.log('#=> Navigated to Produto.')
       const { navigate } = this.props.navigation;
 
         return( 
             <View style={styles.perfilContainer}>
                 <StatusBar barStyle="dark-content"/>
-                <Image style={styles.logoBG} source={require('../assets/logo-bg.png')}/>
+                <Image style={styles.logoBG} source={{uri: globalState.cardapio.selectedItem.imagem}}/>
 
                 <View style={styles.topHeader}>
                     <View style={styles.inlineFlexRowBetween}>
@@ -49,28 +50,26 @@ export default class Cardapio extends Component{
                         <Text style={styles.inlineItemInfo} textAlign={'center'}>{globalState.cardapio.selectedItem.descricao}</Text>
                     </View>
                     <View style={styles.lineContainer} justifyContent={'space-between'}>
-                        <View style={styles.componenteItemLeft}>
+                        <View style={styles.componenteItemLeft} width={'50%'}>
                             <Text style={styles.inlineItemTitle}>Valor: </Text>
                         </View>
-                        <View style={styles.componenteItemRight}>
+                        <View style={styles.componenteItemRight} width={'50%'}>
                             <Text style={styles.inlineItemPrice}>{floatToReais(this.state.itemTotal)}</Text>
                         </View>
                     </View>
                     <View style={styles.lineContainer} justifyContent={'space-between'}>
-                        <View style={styles.componenteItemLeft}>
+                        <View style={styles.componenteItemLeft} width={'45%'}>
                             <Text style={styles.inlineItemTitle}>Quantidade: </Text>
                         </View>
-                            <View style={styles.lineContainer} padding={0} backgroundColor={null}>
-                                <TouchableOpacity style={styles.refreshButton} onPress={() => this.UpdateItemInfo(--this.state.itemQTD)}>
-                                    <Icon name="minus" color={commonStyles.colors.danger} size={20}/>
-                                </TouchableOpacity>
+                            <TouchableOpacity style={styles.refreshButton} onPress={() => this.UpdateItemInfo(--this.state.itemQTD)}>
+                                <Icon name="minus" color={commonStyles.colors.danger} size={20}/>
+                            </TouchableOpacity>
 
-                                    <Text style={styles.inlineItemPrice}>{this.state.itemQTD}</Text>
+                            <Text style={styles.inlineItemPrice}>{this.state.itemQTD.twoDigits()}</Text>
 
-                                <TouchableOpacity style={styles.refreshButton} onPress={() => this.UpdateItemInfo(++this.state.itemQTD)}>
-                                    <Icon name="plus" color={commonStyles.colors.success} size={20}/>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={styles.refreshButton} onPress={() => this.UpdateItemInfo(++this.state.itemQTD)}>
+                                <Icon name="plus" color={commonStyles.colors.success} size={20}/>
+                            </TouchableOpacity>
                     </View>
                     <View style={styles.lineContainer} marginBottom={0}>
                         <Text style={styles.inlineItemInfo} textAlign={'center'}>Observação</Text>
@@ -81,7 +80,7 @@ export default class Cardapio extends Component{
                 </ScrollView>
 
                 <View style={styles.navBarBottom}>
-                    <TouchableOpacity style={styles.tabButtonSucess} onPress={() => navigate('Cardapio')}>
+                    <TouchableOpacity style={styles.tabButtonSucess} onPress={() => this.addItemToCarrinho()}>
                         <Text style={styles.tabButtonText} textAlign={'center'}>CONTINUAR</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabButtonDanger} onPress={() => navigate('Categorias')}>
@@ -92,15 +91,32 @@ export default class Cardapio extends Component{
         )
     }
 
-    UpdateItemInfo = (qtd, desc = this.state.itemDesc) => {
+    addItemToCarrinho = () => {
+        console.log('RUNNING => @addItemToCarrinho => ', globalState.cardapio.selectedItem.nome)
+        
+        globalState.cardapio.selectedItem.qtd = this.state.itemQTD
+        globalState.cardapio.selectedItem.observacao = this.state.itemObs
+        globalState.cardapio.selectedItem.valor_total = this.state.itemTotal
+        globalState.usuario.carrinho.valor_total += parseFloat(this.state.itemTotal)
+
+        globalState.usuario.carrinho.items.push(globalState.cardapio.selectedItem)
+  
+        const { navigate } = this.props.navigation;
+        navigate('Carrinho')
+    }
+
+    UpdateItemInfo = (qtd, desc = this.state.itemObs) => {
+        console.log('UPDATED item => ', this.state.itemQTD, globalState.cardapio.selectedItem.nome)
+
         this.setState({
             itemQTD: qtd > 0 ? qtd : 0,
-            itemDesc: desc
+            itemObs: desc
         })
         const total = this.state.itemQTD * globalState.cardapio.selectedItem.valor
         this.setState({itemTotal: total > 0 ? total: 0})
     }
-};
+}
+
 function floatToReais(numero) {
     var numero = parseFloat(numero).toFixed(2).split('.');
     numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');

@@ -7,11 +7,9 @@ export default StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: commonStyles.colors.black
   },
   tabButtonSucess: {
     width: '50%',
-    margin: 0,
     padding: 15,
     alignContent: 'center',
     alignItems: 'center',
@@ -22,14 +20,13 @@ export default StyleSheet.create({
   },
   tabButtonDanger: {
     width: '50%',
-    margin: 0,
     padding: 15,
     alignContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     textAlign: 'center',
     justifyContent: 'center',
-    backgroundColor: commonStyles.colors.danger
+    backgroundColor: commonStyles.colors.primary
   },
   tabButtonText: {
     fontSize: 18,
@@ -178,7 +175,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   componenteItemRight: {
-    width: '25%',
+    width: '30%',
     justifyContent: 'flex-end',
   },  
   inlineItemTitle: {
@@ -189,6 +186,7 @@ export default StyleSheet.create({
   inlineItemPrice: {
     fontSize: 22,
     fontWeight: 'bold',
+    textAlign: 'right',
     color: commonStyles.colors.secondary
   },  
   inlineItemInfo: {
@@ -196,14 +194,18 @@ export default StyleSheet.create({
     color: commonStyles.colors.primary
   },
 
-  /////////////////////////////////////////////////// COMPONENTS ///////////////////////////////////////////////////
-  dangerBtn: {
-    color: commonStyles.colors.white,
-    backgroundColor: commonStyles.colors.danger,
+  inlineItemRemoveText: {
+    fontSize: 18,
+    marginLeft: 7.5,
+    fontWeight: 'bold',
+    color: commonStyles.colors.primary
   },
-  successBtn: {
-    color: commonStyles.colors.white,
-    backgroundColor:  commonStyles.colors.success,
+
+  /////////////////////////////////////////////////// COMPONENTS ///////////////////////////////////////////////////
+  thinRedLine: {
+    height: 1,
+    width: '100%',
+    backgroundColor: commonStyles.colors.primary,
   },
   //////////////////////////////////////////////// END OFCOMPONENTS ////////////////////////////////////////////////
 });

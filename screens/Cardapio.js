@@ -1,14 +1,11 @@
 import React, {Component} from 'react'
-import { View, StatusBar, Text, Image, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
-
-import moment from 'moment'
-import 'moment/locale/pt-br'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { View, StatusBar, Text, Image, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
 import commonStyles from '../assets/styles/commonStyles'
-import ItemCardapio from './components/ItemCardapio';
+import ItemCardapio from './components/ItemCardapio'
 
 export default class Cardapio extends Component{
     
@@ -25,15 +22,10 @@ export default class Cardapio extends Component{
       this.state = {
         isLoading: true,
       }
-      updateState = this.updateLoadingState.bind(this)
     }
 
-    updateLoadingState = (value) => {
-      this.setState({ isLoading: value });
-    }  
-
     render () {     
-      console.log('#=> Navigated to Cardapio.')
+      //console.log('#=> Navigated to Cardapio.')
       const { navigate } = this.props.navigation;
 
       if (this.state.isLoading == true) {
@@ -46,16 +38,10 @@ export default class Cardapio extends Component{
 
             <View style={styles.topHeader}>
               <View style={styles.inlineFlexRowBetween}>
-                <Text style={styles.welcomeSubText}>Cardápio</Text>
+                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
 
-                <TouchableOpacity style={styles.refreshButton} onPress={this.refreshList}>
-                  <Icon name="refresh" color={commonStyles.colors.white} size={20}/>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Historico')}>
-                    <Icon name="history" color={commonStyles.colors.white} size={20}/>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Carrinho')}>
-                    <Icon name="shopping-basket" color={commonStyles.colors.white} size={20}/>
+                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
+                  <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -74,7 +60,7 @@ export default class Cardapio extends Component{
             <View style={styles.topHeader}>            
 
               <View style={styles.inlineFlexRowBetween}>
-                <Text style={styles.welcomeSubText}>Cardápio</Text>
+                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
 
                 <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
                   <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
@@ -83,10 +69,10 @@ export default class Cardapio extends Component{
             </View>
 
           <View style={styles.pageBody}>
-            <FlatList data={globalState.cardapio.items.filter(item => item.id_grupo == globalState.cardapio.selectedGroupID)}
-            extraData={this.state}
-            keyExtractor={item => `${item.id_aula}`}
-            renderItem={({ item }) => <TouchableOpacity onPress={ () => this.selectProduct(item) }><ItemCardapio {...item}/></TouchableOpacity>}/>
+            <FlatList data={globalState.cardapio.items.filter(item => item.id_grupo == globalState.cardapio.selectedGroup.id)}
+              extraData={this.state}
+              keyExtractor={item => `${item.id}`}
+              renderItem={({ item }) => <TouchableOpacity onPress={ () => this.selectProduct(item) }><ItemCardapio {...item}/></TouchableOpacity>}/>
           </View>
         </View>
         ) 
@@ -94,7 +80,7 @@ export default class Cardapio extends Component{
     }
 
     selectProduct = (item) => {
-      console.log('RUNNING => @selectProduct()', item)
+      console.log('RUNNING => @selectProduct => ', item.nome)
 
       globalState.cardapio.selectedItem = item
       globalState.cardapio.selectedItem.qtd = 1
@@ -111,17 +97,22 @@ export default class Cardapio extends Component{
     }
 
     _UpdateCardapio = (result) => {
-      //Atualizando a global 'cardapio.categorias'
-      globalState.cardapio.items = result.filter(item => item.id_grupo === globalState.cardapio.selectedGroupID)
-      console.log('UPDATED => #globalState.cardapio.items =', globalState.cardapio.items)
+      globalState.cardapio.items = result.filter(item => item.id_grupo === globalState.cardapio.selectedGroup.id)
+      console.log('UPDATED => #globalState.cardapio.items')
 
+      if (!globalState.cardapio.items.length)
+      {
+        const { navigate } = this.props.navigation;
+        Alert.alert('Desculpe, no momento não há itens nessa categoria.')
+        navigate('Categorias')
+      }
       this.setState({isLoading: false})
     }
 };
 
 // LogIn Webservice: Faz a requisição ao webservice para logar ou atualizar as listas de aulas.
 async function getCardapio( callback ) {
-  console.log('RUNNING => @logInWebservice()')
+  console.log('RUNNING => @getCardapio()')
 
   await fetch('http://thechefs.sis.net.br/webservices/cardapio.php').then((response) => {        
    return response.json()
