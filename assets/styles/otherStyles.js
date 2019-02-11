@@ -209,6 +209,16 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: commonStyles.colors.primary
   },
+  inputText: {
+    fontSize: 18,
+    color: commonStyles.colors.secondary,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: commonStyles.colors.primary,
+    borderRadius: 4,
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
 
   /////////////////////////////////////////////////// COMPONENTS ///////////////////////////////////////////////////
   thinRedLine: {

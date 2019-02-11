@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
+import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { ScrollView, View, StatusBar, Text, Image, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native'
 
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
@@ -18,8 +19,18 @@ export default class Cardapio extends Component{
     constructor(props) {
       super(props)
 
+      this.inputRefs = {
+        method: null,
+        delivery: null,
+        neighborhood: null,
+    };
+
       this.state = {
-        method: 'DINHEIRO',
+        method: 'Dinheiro',
+        delivery: 'Balcão',
+        neighborhood: 'BAIRRO DAS AGUAS',
+        name: '',
+        phone: '',
       }
     }
 
@@ -43,30 +54,122 @@ export default class Cardapio extends Component{
               </View>
             </View>
 
-          <View style={styles.pageBody}>
+          <ScrollView style={styles.pageBody}>
 
             <View style={styles.lineContainer} justifyContent={'space-between'}>
                 <View style={styles.componenteItemLeft} width={'50%'}>
                     <Text style={styles.inlineItemTitle}>Pagamento em: </Text>
                 </View>
-                <ScrollView style={styles.improvisedSelect} width={'50%'}>
-                  <Text style={styles.inlineItemTitle}>Dinheiro</Text>
-                  <Text style={styles.inlineItemTitle}>Cartão de Débito</Text>
-                  <Text style={styles.inlineItemTitle}>Cartão de Crédito</Text>
-                </ScrollView>
+                <View style={styles.componenteItemRight} width={'50%'}>
+                  <RNPickerSelect
+                      items={[{
+                          label: 'Dinheiro',
+                          value: 'Dinheiro',
+                        },{
+                          label: 'Cartão de Débito',
+                          value: 'Cartão de Débito',
+                        },{
+                          label: 'Cartão de Crédito',
+                          value: 'Cartão de Crédito',
+                        }]
+                      }
+                      onValueChange={(value) => {
+                          this.setState({
+                            method: value,
+                          });
+                      }}
+                      style={pickerSelectStyles}
+                      value={this.state.method}
+                      useNativeAndroidPickerStyle={false}
+                      ref={(el) => {
+                          this.inputRefs.method = el;
+                      }}
+                    />
+                </View>
             </View>
 
             <View style={styles.lineContainer} justifyContent={'space-between'}>
                 <View style={styles.componenteItemLeft} width={'50%'}>
                   <Text style={styles.inlineItemTitle}>Retirada: </Text>
                 </View>
-                <ScrollView style={styles.improvisedSelect} width={'50%'}>
-                  <Text style={styles.inlineItemTitle}>Balcão</Text>
-                  <Text style={styles.inlineItemTitle}>Entrega</Text>
-                </ScrollView>
+                <View style={styles.componenteItemRight} width={'50%'}>
+                  <RNPickerSelect
+                      items={[{
+                          label: 'Balcão',
+                          value: 'Balcão',
+                        },{
+                          label: 'Entrega',
+                          value: 'Entrega',
+                        }]
+                      }
+                      onValueChange={(value) => {
+                          this.setState({
+                            delivery: value,
+                          });
+                      }}
+                      style={pickerSelectStyles}
+                      value={this.state.delivery}
+                      useNativeAndroidPickerStyle={false}
+                      ref={(el) => {
+                          this.inputRefs.delivery = el;
+                      }}
+                    />
+                </View>
             </View>
 
-          </View>
+          { 
+            (this.state.delivery == 'Balcão') ?
+              <View>
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'50%'}>
+                    <Text style={styles.inlineItemTitle}>Nome: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'50%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá buscar.'}/>
+                  </View>
+                </View>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'50%'}>
+                    <Text style={styles.inlineItemTitle}>Celular: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'50%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({phone: text})} placeholder={'(XX) X XXXX XXXX'}/>
+                  </View>
+                </View>
+                </View>
+            :
+              <View style={styles.lineContainer} justifyContent={'space-between'}>
+                <View style={styles.componenteItemLeft} width={'50%'}>
+                  <Text style={styles.inlineItemTitle}>Bairro: </Text>
+                </View>
+                <View style={styles.componenteItemRight} width={'50%'}>
+                  <RNPickerSelect
+                      items={[{
+                          label: 'BAIRRO DAS AGUAS - R$ 4,00',
+                          value: 'BAIRRO DAS AGUAS',
+                        },{
+                          label: 'AREAL - R$ 2,00',
+                          value: 'AREAL',
+                        }]
+                      }
+                      onValueChange={(value) => {
+                          this.setState({
+                            neighborhood: value,
+                          });
+                      }}
+                      style={pickerSelectStyles}
+                      value={this.state.neighborhood}
+                      useNativeAndroidPickerStyle={false}
+                      ref={(el) => {
+                          this.inputRefs.neighborhood = el;
+                      }}
+                    />
+                </View>
+              </View>
+          }
+
+          </ScrollView>
             <View style={styles.navBarBottom}>
                 <TouchableOpacity style={styles.tabButtonUnique} onPress={() => Alert.alert('Finalizado!')}>
                     <Text style={styles.tabButtonText} textAlign={'center'}>CONFIRMAR</Text>
@@ -96,3 +199,28 @@ async function finishOrder( callback ) {
       console.error(error)
   });
 };
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: commonStyles.colors.primary,
+    borderRadius: 4,
+    color: commonStyles.colors.secondary,
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: commonStyles.colors.primary,
+    borderRadius: 8,
+    color: commonStyles.colors.secondary,
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});

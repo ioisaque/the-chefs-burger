@@ -21,10 +21,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "buildNumber": "1",
+      "supportsTablet": false,
       "bundleIdentifier": "pro.sige.thechefsburguer"
     },
     "android": {
+      "versionCode": 1,
+      "permissions": [],
       "package": "pro.sige.thechefsburguer"
     }
   }
