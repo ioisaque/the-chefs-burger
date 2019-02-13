@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity  } from 'react-native'
 
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
@@ -27,8 +27,8 @@ export default class Cardapio extends Component{
 
       this.state = {
         method: 'Dinheiro',
-        delivery: 'Balcão',
-        neighborhood: 'BAIRRO DAS AGUAS',
+        delivery: 'Selecione...',
+        neighborhood: 'Selecione...',
         name: '',
         phone: '',
       }
@@ -62,6 +62,10 @@ export default class Cardapio extends Component{
                 </View>
                 <View style={styles.componenteItemRight} width={'50%'}>
                   <RNPickerSelect
+                      placeholder={{
+                        label: 'Selecione...',
+                        value: 'Selecione...',
+                      }}
                       items={[{
                           label: 'Dinheiro',
                           value: 'Dinheiro',
@@ -84,6 +88,7 @@ export default class Cardapio extends Component{
                       ref={(el) => {
                           this.inputRefs.method = el;
                       }}
+                      placeholderTextColor={commonStyles.colors.primary}
                     />
                 </View>
             </View>
@@ -94,6 +99,10 @@ export default class Cardapio extends Component{
                 </View>
                 <View style={styles.componenteItemRight} width={'50%'}>
                   <RNPickerSelect
+                      placeholder={{
+                        label: 'Selecione...',
+                        value: 'Selecione...',
+                      }}
                       items={[{
                           label: 'Balcão',
                           value: 'Balcão',
@@ -113,6 +122,7 @@ export default class Cardapio extends Component{
                       ref={(el) => {
                           this.inputRefs.delivery = el;
                       }}
+                      placeholderTextColor={commonStyles.colors.primary}
                     />
                 </View>
             </View>
@@ -125,7 +135,7 @@ export default class Cardapio extends Component{
                     <Text style={styles.inlineItemTitle}>Nome: </Text>
                   </View>
                   <View style={styles.componenteItemRight} width={'50%'}>
-                    <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá buscar.'}/>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá buscar.'} keyboardType={'name-phone-pad'}/>
                   </View>
                 </View>
 
@@ -134,17 +144,26 @@ export default class Cardapio extends Component{
                     <Text style={styles.inlineItemTitle}>Celular: </Text>
                   </View>
                   <View style={styles.componenteItemRight} width={'50%'}>
-                    <TextInput style={styles.inputText} onChangeText={text => this.setState({phone: text})} placeholder={'(XX) X XXXX XXXX'}/>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({phone: text})} placeholder={'(XX) X XXXX XXXX'} keyboardType={'numeric'}/>
                   </View>
                 </View>
                 </View>
             :
+              null
+          }
+
+{ 
+            (this.state.delivery == 'Entrega') ?
               <View style={styles.lineContainer} justifyContent={'space-between'}>
                 <View style={styles.componenteItemLeft} width={'50%'}>
                   <Text style={styles.inlineItemTitle}>Bairro: </Text>
                 </View>
                 <View style={styles.componenteItemRight} width={'50%'}>
                   <RNPickerSelect
+                      placeholder={{
+                        label: 'Selecione...',
+                        value: 'Selecione...',
+                      }}
                       items={[{
                           label: 'BAIRRO DAS AGUAS - R$ 4,00',
                           value: 'BAIRRO DAS AGUAS',
@@ -164,14 +183,17 @@ export default class Cardapio extends Component{
                       ref={(el) => {
                           this.inputRefs.neighborhood = el;
                       }}
+                      placeholderTextColor={commonStyles.colors.primary}
                     />
                 </View>
               </View>
+            :
+              null
           }
 
           </ScrollView>
             <View style={styles.navBarBottom}>
-                <TouchableOpacity style={styles.tabButtonUnique} onPress={() => Alert.alert('Finalizado!')}>
+                <TouchableOpacity style={styles.tabButtonUnique} onPress={() => this.finishOrder()}>
                     <Text style={styles.tabButtonText} textAlign={'center'}>CONFIRMAR</Text>
                 </TouchableOpacity>
             </View>
@@ -179,25 +201,22 @@ export default class Cardapio extends Component{
         ) 
     }
 
-    handleResultAndRedirect = (result) => {
-      console.log('RECIEVED => ', result)
+    finishOrder = () => {
+      console.log('RUNNING => @finishOrder()')
+      
+      globalState.usuario.pedido.entrega.nome = this.state.name
+      globalState.usuario.pedido.entrega.celular = this.state.phone
+      globalState.usuario.pedido.entrega.bairro = this.state.neighborhood
 
-        const { navigate } = this.props.navigation;
-        navigate('Categorias')
+      globalState.usuario.pedido.pagamento_em = this.state.method
+      globalState.usuario.pedido.entrega.tipo = this.state.delivery
+      globalState.usuario.pedido.items = globalState.usuario.carrinho.items
+      globalState.usuario.pedido.valor_total = globalState.usuario.carrinho.valor_total
+
+      console.log('PEDIDO ==> ', globalState.usuario.pedido)
+      const { navigate } = this.props.navigation;
+      navigate('Endereco')
     }
-};
-
-async function finishOrder( callback ) {
-  console.log('RUNNING => @getCardapio()')
-
-  await fetch('http://thechefs.sis.net.br/webservices/cardapio.php').then((response) => {        
-   return response.json()
-  }).then((responseJson) => {
-      callback(responseJson)
-    })
-    .catch((error) => {
-      console.error(error)
-  });
 };
 
 const pickerSelectStyles = StyleSheet.create({

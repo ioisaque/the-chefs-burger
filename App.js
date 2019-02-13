@@ -5,6 +5,7 @@ import Historico from './screens/Historico'
 import Produto from './screens/Produto'
 import Carrinho from './screens/Carrinho'
 import Finalizar from './screens/Finalizar'
+import Endereco from './screens/Endereco'
 
 import { createStackNavigator } from 'react-navigation'
 import commonStyles from './assets/styles/commonStyles';
@@ -16,6 +17,7 @@ const navigator = createStackNavigator (
     Produto: Produto,
     Carrinho: Carrinho,
     Finalizar: Finalizar,
+    Endereco: Endereco,
     Historico: Historico,
   },
   {
@@ -43,6 +45,21 @@ export const globalState = {
   usuario: {
     carrinho: {
       items: [],
+      valor_total: 0
+    },
+    pedido: {
+      items: [],
+      entrega: {
+        tipo: '',
+        nome: '',
+        celular: '',
+        
+          endereco: '',
+          numero: '',
+          bairro: '',
+          complemento: ''
+      },
+      pagamento_em: '',
       valor_total: 0
     },
     historico: []
