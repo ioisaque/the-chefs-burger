@@ -237,5 +237,16 @@ export default StyleSheet.create({
     fontSize: 20,
     color: commonStyles.colors.secondary
   },
+
+  animatedContainer: {
+    backgroundColor: 'gray',
+    flex: 1,
+    height: '100%',
+    justifyContent: 'space-around',
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: '100%'
+  },
   //////////////////////////////////////////////// END OFCOMPONENTS ////////////////////////////////////////////////
 });

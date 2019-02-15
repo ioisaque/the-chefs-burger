@@ -9,6 +9,8 @@ import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
 import commonStyles from '../assets/styles/commonStyles'
 
+import KeyboardShift from './components/KeyboardShift'
+
 export default class Cardapio extends Component{
     
     static navigationOptions = {
@@ -34,76 +36,80 @@ export default class Cardapio extends Component{
       //console.log('#=> Navigated to Cardapio.')
       const { navigate } = this.props.navigation;
 
-        return( 
-        <View style={styles.perfilContainer}>
-            <StatusBar barStyle="dark-content"/>
-            <Image style={styles.logoBG} source={require('../assets/logo-bg.png')}/>
+        return(
+          <KeyboardShift>
+          {() => (
+            <View style={styles.perfilContainer}>
+              <StatusBar barStyle="dark-content"/>
+              <Image style={styles.logoBG} source={require('../assets/logo-bg.png')}/>
 
-            <View style={styles.topHeader}>            
+              <View style={styles.topHeader}>            
 
-              <View style={styles.inlineFlexRowBetween}>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
-                  <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
-                </TouchableOpacity>
+                <View style={styles.inlineFlexRowBetween}>
+                  <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
+                    <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
+                  </TouchableOpacity>
 
-                <Text style={styles.welcomeSubText}>Entrega</Text>
+                  <Text style={styles.welcomeSubText}>Entrega</Text>
+                </View>
+              </View>
+
+              <ScrollView style={styles.pageBody}>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'30%'}>
+                    <Text style={styles.inlineItemTitle}>Nome: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'70%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá receber.'} keyboardType={'name-celular-pad'}/>
+                  </View>
+                </View>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'30%'}>
+                    <Text style={styles.inlineItemTitle}>Celular: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'70%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({celular: text})} placeholder={'(XX) X XXXX XXXX'} keyboardType={'numeric'}/>
+                  </View>
+                </View>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'30%'}>
+                    <Text style={styles.inlineItemTitle}>Endereço: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'70%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({endereco: text})} placeholder={'Rua/Av'} keyboardType={'name-phone-pad'}/>
+                  </View>
+                </View>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'30%'}>
+                    <Text style={styles.inlineItemTitle}>Número: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'70%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({numero: text})} keyboardType={'numeric'}/>
+                  </View>
+                </View>
+
+                <View style={styles.lineContainer} justifyContent={'space-between'}>
+                  <View style={styles.componenteItemLeft} width={'30%'}>
+                    <Text style={styles.inlineItemTitle}>Comple.: </Text>
+                  </View>
+                  <View style={styles.componenteItemRight} width={'70%'}>
+                    <TextInput style={styles.inputText} onChangeText={text => this.setState({complemento: text})}/>
+                  </View>
+                </View>
+
+              </ScrollView>
+              <View style={styles.navBarBottom}>
+                  <TouchableOpacity style={styles.tabButtonUnique} onPress={() => this.confirmOrder()}>
+                      <Text style={styles.tabButtonText} textAlign={'center'}>CONFIRMAR</Text>
+                  </TouchableOpacity>
               </View>
             </View>
-
-          <ScrollView style={styles.pageBody}>
-
-            <View style={styles.lineContainer} justifyContent={'space-between'}>
-              <View style={styles.componenteItemLeft} width={'30%'}>
-                <Text style={styles.inlineItemTitle}>Nome: </Text>
-              </View>
-              <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá receber.'} keyboardType={'name-celular-pad'}/>
-              </View>
-            </View>
-
-            <View style={styles.lineContainer} justifyContent={'space-between'}>
-              <View style={styles.componenteItemLeft} width={'30%'}>
-                <Text style={styles.inlineItemTitle}>Celular: </Text>
-              </View>
-              <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({celular: text})} placeholder={'(XX) X XXXX XXXX'} keyboardType={'numeric'}/>
-              </View>
-            </View>
-
-            <View style={styles.lineContainer} justifyContent={'space-between'}>
-              <View style={styles.componenteItemLeft} width={'30%'}>
-                <Text style={styles.inlineItemTitle}>Endereço: </Text>
-              </View>
-              <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({endereco: text})} placeholder={'Rua/Av'} keyboardType={'name-phone-pad'}/>
-              </View>
-            </View>
-
-            <View style={styles.lineContainer} justifyContent={'space-between'}>
-              <View style={styles.componenteItemLeft} width={'30%'}>
-                <Text style={styles.inlineItemTitle}>Número: </Text>
-              </View>
-              <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({numero: text})} keyboardType={'numeric'}/>
-              </View>
-            </View>
-
-            <View style={styles.lineContainer} justifyContent={'space-between'}>
-              <View style={styles.componenteItemLeft} width={'30%'}>
-                <Text style={styles.inlineItemTitle}>Comple.: </Text>
-              </View>
-              <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({complemento: text})}/>
-              </View>
-            </View>
-
-          </ScrollView>
-            <View style={styles.navBarBottom}>
-                <TouchableOpacity style={styles.tabButtonUnique} onPress={() => this.confirmOrder()}>
-                    <Text style={styles.tabButtonText} textAlign={'center'}>CONFIRMAR</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+          )}
+          </KeyboardShift>
         ) 
     }
 
