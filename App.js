@@ -6,6 +6,7 @@ import Produto from './screens/Produto'
 import Carrinho from './screens/Carrinho'
 import Finalizar from './screens/Finalizar'
 import Endereco from './screens/Endereco'
+import Resumo from './screens/Resumo'
 
 import { createStackNavigator } from 'react-navigation'
 import commonStyles from './assets/styles/commonStyles';
@@ -19,6 +20,7 @@ const navigator = createStackNavigator (
     Finalizar: Finalizar,
     Endereco: Endereco,
     Historico: Historico,
+    Resumo: Resumo,
   },
   {
     initialRouteName: 'Categorias',
@@ -62,7 +64,10 @@ export const globalState = {
       pagamento_em: '',
       valor_total: 0
     },
-    historico: []
+    historico: {
+      pedidos: [],    
+      selectedOrder: undefined
+    }
   },
 
   cardapio:{

@@ -38,11 +38,10 @@ export default class Cardapio extends Component{
 
             <View style={styles.topHeader}>
               <View style={styles.inlineFlexRowBetween}>
-                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
-
                 <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
                   <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
+                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
               </View>
             </View>
 
@@ -60,11 +59,10 @@ export default class Cardapio extends Component{
             <View style={styles.topHeader}>            
 
               <View style={styles.inlineFlexRowBetween}>
-                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
-
                 <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
                   <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
+                <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedGroup.grupo}</Text>
               </View>
             </View>
 
@@ -83,7 +81,7 @@ export default class Cardapio extends Component{
       console.log('RUNNING => @selectProduct => ', item.nome)
 
       globalState.cardapio.selectedItem = item
-      globalState.cardapio.selectedItem.qtd = 1
+      globalState.cardapio.selectedItem.quantidade = 1
 
       const { navigate } = this.props.navigation;
       navigate('Produto')

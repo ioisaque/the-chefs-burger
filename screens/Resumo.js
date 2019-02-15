@@ -5,9 +5,9 @@ import { View, StatusBar, Text, Image, FlatList, TouchableOpacity } from 'react-
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
 import commonStyles from '../assets/styles/commonStyles'
-import ItemHistorico from './components/ItemHistorico'
+import ItemResumo from './components/ItemResumo'
 
-export default class Histórico extends Component{
+export default class Resumo extends Component{
     
     static navigationOptions = {
       header: null,
@@ -26,7 +26,7 @@ export default class Histórico extends Component{
 
     render () {     
       //console.log('\n|##################################################################|\n')
-      //console.log(' ==> Navigated to Histórico.\n\n', globalState.usuario.carrinho.items)
+      //console.log(' ==> Navigated to Resumo.\n\n', globalState.usuario.carrinho.items)
       //console.log('\n|##################################################################|\n')
       const { navigate } = this.props.navigation
 
@@ -37,37 +37,43 @@ export default class Histórico extends Component{
 
                 <View style={styles.topHeader}>
                     <View style={styles.inlineFlexRowBetween}>
-                        <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
-                            <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
+                        <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Historico')}>
+                            <Icon name="close" color={commonStyles.colors.white} size={20}/>
                         </TouchableOpacity>
 
-                        <Text style={styles.welcomeSubText}>Histórico</Text>
+                        <Text style={styles.welcomeSubText}>Resumo do Pedido</Text>
                     </View>
                 </View>
 
                 <View style={styles.pageBody}>
-                      <View style={styles.lineContainer} justifyContent={'space-between'} marginBottom={0}>
-                          <View style={styles.componenteItemLeft} width={'50%'}>
-                              <Text style={styles.inlineItemTitle}>Nº do Pedido</Text>
-                          </View>
-                          <View style={styles.componenteItemRight} width={'50%'}>
-                              <Text style={styles.inlineItemPrice}>Data do Pedido</Text>
-                          </View>
-                      </View>
+                    <View style={styles.lineContainer} justifyContent={'space-between'} marginBottom={0}>
+                        <View style={styles.componenteItemLeft} width={'50%'}>
+                            <Text style={styles.inlineItemTitle}>#{globalState.usuario.historico.selectedOrder.id_pedido}</Text>
+                        </View>
+                        <View style={styles.componenteItemRight} width={'50%'}>
+                            <Text style={styles.inlineItemPrice}>{globalState.usuario.historico.selectedOrder.data_pedido}</Text>
+                        </View>
+                    </View>
                       
                     <View style={styles.thinRedLine} marginBottom={10}/>
 
-                    <FlatList data={globalState.usuario.historico.pedidos}
+                    <FlatList data={globalState.usuario.historico.selectedOrder.items}
                         extraData={this.state}
                         refreshing={this.state.listIsLoading}
                         keyExtractor={item => `${item.id}`}
-                        renderItem={({ item }) => <TouchableOpacity onPress={() => { 
-                            globalState.usuario.historico.selectedOrder = item
-                            navigate('Resumo')
-                        }}><ItemHistorico {...item}/></TouchableOpacity>}
+                        renderItem={({ item }) => <TouchableOpacity onPress={ () => this.selectProduct(item) }><ItemResumo {...item}/></TouchableOpacity>}
                     />
                 </View>
             </View>
         ) 
     }
+
+    selectProduct = (item) => {
+        console.log('RUNNING => @selectProduct => ', item.nome)
+  
+        globalState.cardapio.selectedItem = item
+  
+        const { navigate } = this.props.navigation;
+        navigate('Produto')
+      }
 }

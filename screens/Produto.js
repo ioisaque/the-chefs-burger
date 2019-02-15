@@ -20,7 +20,7 @@ export default class Cardapio extends Component{
       super(props)
 
       this.state = {
-        itemQTD: globalState.cardapio.selectedItem.qtd,
+        itemQTD: globalState.cardapio.selectedItem.quantidade,
         itemTotal: globalState.cardapio.selectedItem.valor,
         itemObs: ''
       }
@@ -37,11 +37,11 @@ export default class Cardapio extends Component{
 
                 <View style={styles.topHeader}>
                     <View style={styles.inlineFlexRowBetween}>
-                        <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedItem.nome}</Text>
-
                         <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Cardapio')}>
                             <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
                         </TouchableOpacity>
+
+                        <Text style={styles.welcomeSubText}>{globalState.cardapio.selectedItem.nome}</Text>
                     </View>
                 </View>
 
@@ -94,7 +94,7 @@ export default class Cardapio extends Component{
     addItemToCarrinho = () => {
         console.log('RUNNING => @addItemToCarrinho => ', globalState.cardapio.selectedItem.nome)
         
-        globalState.cardapio.selectedItem.qtd = this.state.itemQTD
+        globalState.cardapio.selectedItem.quantidade = this.state.itemQTD
         globalState.cardapio.selectedItem.observacao = this.state.itemObs
         globalState.cardapio.selectedItem.valor_total = this.state.itemTotal
         globalState.usuario.carrinho.valor_total += parseFloat(this.state.itemTotal)
@@ -105,11 +105,11 @@ export default class Cardapio extends Component{
         navigate('Carrinho')
     }
 
-    UpdateItemInfo = (qtd, desc = this.state.itemObs) => {
+    UpdateItemInfo = (quantidade, desc = this.state.itemObs) => {
         console.log('UPDATED item => ', this.state.itemQTD, globalState.cardapio.selectedItem.nome)
 
         this.setState({
-            itemQTD: qtd > 0 ? qtd : 0,
+            itemQTD: quantidade > 0 ? quantidade : 0,
             itemObs: desc
         })
         const total = this.state.itemQTD * globalState.cardapio.selectedItem.valor

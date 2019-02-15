@@ -48,11 +48,11 @@ export default class Cardapio extends Component{
                 <TouchableOpacity style={styles.refreshButton} onPress={this.refreshList}>
                   <Icon name="refresh" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Historico')}>
-                    <Icon name="history" color={commonStyles.colors.white} size={20}/>
+                <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.usuario.historico.pedidos.length ? navigate('Historico') : Alert.alert('Histórico vazio.')}>
+                  <Icon name="history" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Carrinho')}>
-                    <Icon name="shopping-basket" color={commonStyles.colors.white} size={20}/>
+                <TouchableOpacity style={styles.refreshButton} onPress={() =>  globalState.usuario.carrinho.items.length ? navigate('Carrinho') : Alert.alert('Carrinho vazio.')}>
+                  <Icon name="shopping-basket" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -76,7 +76,7 @@ export default class Cardapio extends Component{
                 <TouchableOpacity style={styles.refreshButton} onPress={this.refreshList}>
                   <Icon name="refresh" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.usuario.historico.length ? navigate('Historico') : Alert.alert('Histórico vazio.')}>
+                <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.usuario.historico.pedidos.length ? navigate('Historico') : Alert.alert('Histórico vazio.')}>
                   <Icon name="history" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.refreshButton} onPress={() =>  globalState.usuario.carrinho.items.length ? navigate('Carrinho') : Alert.alert('Carrinho vazio.')}>

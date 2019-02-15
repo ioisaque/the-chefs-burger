@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native'
+import { View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native'
+
+import moment from 'moment'
+import 'moment/locale/pt-br'
 
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
@@ -21,7 +23,7 @@ export default class Cardapio extends Component{
 
       this.state = {
         name: '',
-        phone: '',
+        celular: '',
         endereco: '',
         numero: '',
         complemento: '',
@@ -40,11 +42,11 @@ export default class Cardapio extends Component{
             <View style={styles.topHeader}>            
 
               <View style={styles.inlineFlexRowBetween}>
-                <Text style={styles.welcomeSubText}>Entrega</Text>
-
                 <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
                   <Icon name="arrow-left" color={commonStyles.colors.white} size={20}/>
                 </TouchableOpacity>
+
+                <Text style={styles.welcomeSubText}>Entrega</Text>
               </View>
             </View>
 
@@ -55,7 +57,7 @@ export default class Cardapio extends Component{
                 <Text style={styles.inlineItemTitle}>Nome: </Text>
               </View>
               <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá receber.'} keyboardType={'name-phone-pad'}/>
+                <TextInput style={styles.inputText} onChangeText={text => this.setState({name: text})} placeholder={'Quem irá receber.'} keyboardType={'name-celular-pad'}/>
               </View>
             </View>
 
@@ -64,7 +66,7 @@ export default class Cardapio extends Component{
                 <Text style={styles.inlineItemTitle}>Celular: </Text>
               </View>
               <View style={styles.componenteItemRight} width={'70%'}>
-                <TextInput style={styles.inputText} onChangeText={text => this.setState({phone: text})} placeholder={'(XX) X XXXX XXXX'} keyboardType={'numeric'}/>
+                <TextInput style={styles.inputText} onChangeText={text => this.setState({celular: text})} placeholder={'(XX) X XXXX XXXX'} keyboardType={'numeric'}/>
               </View>
             </View>
 
@@ -105,26 +107,90 @@ export default class Cardapio extends Component{
         ) 
     }
 
+    printOrderResult = (result) => {
+      console.log('RUNNING => @printOrderResult()', result)
+
+      const { navigate } = this.props.navigation;
+      navigate('Categorias')
+      
+      if (result.status != 'Sucesso')
+        Alert.alert('Ocorreu um erro ao tentar fazer seu pedido, tente novamente...')
+      else{
+        Alert.alert('Pedido realizado com sucesso!')
+        
+        newPedido = new Object()
+        newPedido = {
+          id_pedido: result.id_pedido,
+          data_pedido: moment().format('DD/MM/YY'),
+          items: globalState.usuario.carrinho.items
+        }
+        globalState.usuario.historico.pedidos.push(newPedido)
+
+        globalState.usuario.carrinho = {
+          items: [],
+          valor_total: 0
+        }
+        globalState.usuario.pedido = {
+          items: [],
+          entrega: {
+            tipo: '',
+            nome: '',
+            celular: '',
+            
+              endereco: '',
+              numero: '',
+              bairro: '',
+              complemento: ''
+          },
+          pagamento_em: '',
+          valor_total: 0
+        }
+      }
+    }
+
     confirmOrder = () => {
       console.log('RUNNING => @confirmOrder()')
       
       globalState.usuario.pedido.entrega.nome = this.state.name
-      globalState.usuario.pedido.entrega.celular = this.state.phone
+      globalState.usuario.pedido.entrega.celular = this.state.celular
       globalState.usuario.pedido.entrega.endereco = this.state.endereco
       globalState.usuario.pedido.entrega.numero = this.state.numero
       globalState.usuario.pedido.entrega.complemento = this.state.complemento
 
       console.log('PEDIDO ==> ', globalState.usuario.pedido)
-      const { navigate } = this.props.navigation;
-      //navigate('Categorias')
+      console.log('REQUISIÇÃO ==> ', JSON.stringify({
+        produtos:       globalState.usuario.pedido.items,
+        nome:           globalState.usuario.pedido.entrega.nome,
+        telefone:       globalState.usuario.pedido.entrega.celular,
+        endereco:       globalState.usuario.pedido.entrega.endereco,
+        numero:         globalState.usuario.pedido.entrega.numero,
+        complemento:    globalState.usuario.pedido.entrega.complemento,
+        bairro:         globalState.usuario.pedido.entrega.bairro,
+        cidade:         '',
+        pagamento:      globalState.usuario.pedido.pagamento_em,
+        datahora:       '2019-02-15 10:15' 
+      }))
+      
+      makeOrder( this.printOrderResult )
     }
 };
 
-async function makeAnOrder( callback ) {
-  console.log('RUNNING => @getCardapio()')
-
-  await fetch('http://thechefs.sis.net.br/webservices/cardapio.php').then((response) => {        
-   return response.json()
+async function makeOrder( callback ) {
+  console.log('RUNNING => @makeOrder()')
+  console.log('PEDIDO ==> ', globalState.usuario.pedido)
+  
+  await fetch('http://thechefs.sis.net.br/webservices/pedidos.php?json='+JSON.stringify({
+      produtos:       globalState.usuario.pedido.items,
+      nome:           globalState.usuario.pedido.entrega.nome,
+      telefone:       globalState.usuario.pedido.entrega.celular,
+      endereco:       globalState.usuario.pedido.entrega.endereco,
+      numero:         globalState.usuario.pedido.entrega.numero,
+      complemento:    globalState.usuario.pedido.entrega.complemento,
+      bairro:         globalState.usuario.pedido.entrega.bairro,
+      pagamento:      globalState.usuario.pedido.pagamento_em,
+      datahora:       new Date()
+    })).then((response) => {
+    return response.json()
   }).then((responseJson) => {
       callback(responseJson)
     })
@@ -132,28 +198,3 @@ async function makeAnOrder( callback ) {
       console.error(error)
   });
 };
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: commonStyles.colors.primary,
-    borderRadius: 4,
-    color: commonStyles.colors.secondary,
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: commonStyles.colors.primary,
-    borderRadius: 8,
-    color: commonStyles.colors.secondary,
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});

@@ -203,6 +203,11 @@ export default StyleSheet.create({
     fontSize: 18,
     color: commonStyles.colors.secondary
   },
+  inlineItemInfoR: {
+    fontSize: 18,
+    textAlign: 'right',
+    color: commonStyles.colors.secondary
+  },
   inlineItemRemoveText: {
     fontSize: 18,
     marginLeft: 7.5,

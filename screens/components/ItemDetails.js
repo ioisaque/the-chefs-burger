@@ -12,7 +12,7 @@ export default class ItemDetails extends Component {
         super(props)
   
         this.state = {
-          count: globalState.cardapio.selectedItem.qtd
+          count: globalState.cardapio.selectedItem.quantidade
         }
       }
 
@@ -28,16 +28,16 @@ export default class ItemDetails extends Component {
                     </View>
                     <View style={styles.componenteItemRight}>
                         <View style={styles.lineContainer} backgroundColor={null}>
-                            <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.cardapio.selectedItem.qtd--}>
+                            <TouchableOpacity style={styles.refreshButton} onPress={() => globalState.cardapio.selectedItem.quantidade--}>
                                 <Icon name="minus" color={commonStyles.colors.danger} size={20}/>
                             </TouchableOpacity>
     
                                 <Text style={styles.inlineItemPrice}>{}</Text>
     
                             <TouchableOpacity style={styles.refreshButton} onPress={() => {
-                                console.log('globalState.cardapio.selectedItem.qtd => ', globalState.cardapio.selectedItem.qtd)
-                                globalState.cardapio.selectedItem.qtd++
-                                console.log('globalState.cardapio.selectedItem.qtd => ', globalState.cardapio.selectedItem.qtd)
+                                console.log('globalState.cardapio.selectedItem.quantidade => ', globalState.cardapio.selectedItem.quantidade)
+                                globalState.cardapio.selectedItem.quantidade++
+                                console.log('globalState.cardapio.selectedItem.quantidade => ', globalState.cardapio.selectedItem.quantidade)
                             }}>
                                 <Icon name="plus" color={commonStyles.colors.success} size={20}/>
                             </TouchableOpacity>

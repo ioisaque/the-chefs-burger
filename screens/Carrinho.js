@@ -30,7 +30,7 @@ export default class Carrinho extends Component{
       //console.log('\n|##################################################################|\n')
       //console.log(' ==> Navigated to Carrinho.\n\n', globalState.usuario.carrinho.items)
       //console.log('\n|##################################################################|\n')
-      const { navigate } = this.props.navigation;
+      const { navigate } = this.props.navigation
 
         return( 
             <View style={styles.perfilContainer}>
@@ -39,11 +39,11 @@ export default class Carrinho extends Component{
 
                 <View style={styles.topHeader}>
                     <View style={styles.inlineFlexRowBetween}>
-                        <Text style={styles.welcomeSubText}>Carrinho</Text>
-
                         <TouchableOpacity style={styles.refreshButton} onPress={() => navigate('Categorias')}>
                             <Icon name="close" color={commonStyles.colors.white} size={20}/>
                         </TouchableOpacity>
+
+                        <Text style={styles.welcomeSubText}>Carrinho</Text>
                     </View>
                 </View>
 
