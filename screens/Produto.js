@@ -23,7 +23,7 @@ export default class Cardapio extends Component{
 
       this.state = {
         itemQTD: globalState.cardapio.selectedItem.quantidade,
-        itemTotal: globalState.cardapio.selectedItem.valor,
+        itemTotal: globalState.cardapio.selectedItem.valor * globalState.cardapio.selectedItem.quantidade,
         itemObs: ''
       }
     }
@@ -103,7 +103,7 @@ export default class Cardapio extends Component{
         globalState.cardapio.selectedItem.quantidade = this.state.itemQTD
         globalState.cardapio.selectedItem.observacao = this.state.itemObs
         globalState.cardapio.selectedItem.valor_total = this.state.itemTotal
-        globalState.usuario.carrinho.valor_total += parseFloat(this.state.itemTotal)
+        globalState.usuario.carrinho.valor_total += parseFloat(globalState.cardapio.selectedItem.valor_total)
 
         globalState.usuario.carrinho.items.push(globalState.cardapio.selectedItem)
   

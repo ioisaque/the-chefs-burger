@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ItemCategoria  from "./components/ItemCategoria"
-import { Alert, View, StatusBar, Text, Image, FlatList,  TouchableOpacity, ActivityIndicator } from 'react-native'
+import { AsyncStorage, Alert, View, StatusBar, Text, Image, FlatList,  TouchableOpacity, ActivityIndicator } from 'react-native'
 
 import {globalState} from '../App'
 import styles from '../assets/styles/otherStyles'
@@ -34,6 +34,7 @@ export default class Cardapio extends Component{
       const { navigate } = this.props.navigation;
 
       if (this.state.isLoading == true) {
+        retrieveHistoryData(this._UpdateHistory)
         getCategories(this._UpdateCategories)
         
         return(
@@ -119,6 +120,12 @@ export default class Cardapio extends Component{
       console.log('UPDATED => #globalState.cardapio.categorias')
       this.setState({isLoading: false})
     }
+
+    _UpdateHistory = (result) => {
+      globalState.usuario.historico.pedidos = JSON.parse(result)
+
+      console.log('UPDATED => #globalState.usuario.historico.pedidos')
+    }
 };
 
 // LogIn Webservice: Faz a requisição ao webservice para logar ou atualizar as listas de aulas.
@@ -134,3 +141,20 @@ async function getCategories( callback ) {
       console.error(error)
   });
 };
+
+// LOCAL HISTORY
+retrieveHistoryData = async (callback) => {
+  console.log('RUNNING => @retrieveLoginData()')
+  try {
+    let values = {
+      history: await AsyncStorage.getItem('thechefsburguer_history'),
+    }
+    if (values !== null) {
+      //console.log('Retrived alineLogin_ => ', values)
+      callback(values)
+    }
+   } catch (error) {
+     console.log('Error retrieving data: ', error)
+     return null
+   }
+}

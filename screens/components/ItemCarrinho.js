@@ -14,7 +14,7 @@ export default props => {
                     {props.observacao ? <Text style={styles.inlineItemInfo}>{props.observacao}</Text> : null}
                 </View>
                 <View style={styles.componenteItemRight}>
-                    <Text style={styles.inlineItemPrice}>{floatToReais(props.valor_total)}</Text>
+                    <Text style={styles.inlineItemPrice}>{floatToReais(props.quantidade*props.valor)}</Text>
                 </View>
             </View>
             

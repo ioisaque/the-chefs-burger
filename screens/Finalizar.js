@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
+import { AsyncStorage, StyleSheet, View, ScrollView, StatusBar, Text, TextInput, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 
 import moment from 'moment'
 import 'moment/locale/pt-br'
@@ -94,13 +94,10 @@ export default class Cardapio extends Component{
                     <View style={styles.componenteItemRight} width={'50%'}>
                       <RNPickerSelect
                           placeholder={{
-                            label: 'Selecione...',
-                            value: 'Selecione...',
+                            label: 'Dinheiro',
+                            value: 'Dinheiro',
                           }}
                           items={[{
-                              label: 'Dinheiro',
-                              value: 'Dinheiro',
-                            },{
                               label: 'Cartão de Débito',
                               value: 'Cartão de Débito',
                             },{
@@ -256,6 +253,8 @@ export default class Cardapio extends Component{
           items: globalState.usuario.carrinho.items
         }
         globalState.usuario.historico.pedidos.push(newPedido)
+        
+        storeOrderData(JSON.stringify(globalState.usuario.historico.pedidos))
 
         globalState.usuario.carrinho = {
           items: [],
@@ -353,6 +352,16 @@ async function makeOrder( callback ) {
       console.error(error)
   });
 };
+
+// LOCAL HISTORY
+storeOrderData = async (value) => {
+  //console.log('RUNNING => @storeLoginData()', key + ' = ' + value)
+  try {
+    await AsyncStorage.setItem('thechefsburguer_history', value)
+  } catch (error) {
+    console.log('Error storing data: ', error)
+  }
+}
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
