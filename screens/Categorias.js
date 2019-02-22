@@ -146,12 +146,11 @@ async function getCategories( callback ) {
 retrieveHistoryData = async (callback) => {
   console.log('RUNNING => @retrieveLoginData()')
   try {
-    let values = {
-      history: await AsyncStorage.getItem('thechefsburguer_history'),
-    }
-    if (values !== null) {
-      //console.log('Retrived alineLogin_ => ', values)
-      callback(values)
+      let history = await AsyncStorage.getItem('thechefsburguer_history')
+
+    if (history !== null) {
+      console.log('Retrived thechefsburguer_history => ', history)
+      callback(history)
     }
    } catch (error) {
      console.log('Error retrieving data: ', error)

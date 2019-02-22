@@ -254,7 +254,7 @@ export default class Cardapio extends Component{
         }
         globalState.usuario.historico.pedidos.push(newPedido)
         
-        storeOrderData(JSON.stringify(globalState.usuario.historico.pedidos))
+        storeOrderData( JSON.stringify(globalState.usuario.historico.pedidos) )
 
         globalState.usuario.carrinho = {
           items: [],
@@ -355,7 +355,7 @@ async function makeOrder( callback ) {
 
 // LOCAL HISTORY
 storeOrderData = async (value) => {
-  //console.log('RUNNING => @storeLoginData()', key + ' = ' + value)
+  console.log('RUNNING => @storeOrderData()', value)
   try {
     await AsyncStorage.setItem('thechefsburguer_history', value)
   } catch (error) {
