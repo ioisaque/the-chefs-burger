@@ -132,7 +132,7 @@ export default class Cardapio extends Component{
 async function getCategories( callback ) {
   console.log('RUNNING => @getCategories()')
 
-  await fetch('http://thechefs.sis.net.br/webservices/grupos.php').then((response) => {        
+  await fetch('http://sistema.thechefsburger.com.br/webservices/grupos.php').then((response) => {
    return response.json()
   }).then((responseJson) => {
       callback(responseJson)

@@ -319,7 +319,7 @@ export default class Cardapio extends Component{
 async function getTaxas( callback ) {
   console.log('RUNNING => @getTaxas()')
 
-  await fetch('http://thechefs.sis.net.br/webservices/taxas.php').then((response) => {        
+  await fetch('http://sistema.thechefsburger.com.br/webservices/taxas.php').then((response) => {
    return response.json()
   }).then((responseJson) => {
       callback(responseJson)
@@ -333,7 +333,7 @@ async function makeOrder( callback ) {
   console.log('RUNNING => @makeOrder()')
   console.log('PEDIDO ==> ', globalState.usuario.pedido)
   
-  await fetch('http://thechefs.sis.net.br/webservices/pedidos.php?json='+JSON.stringify({
+  await fetch('http://sistema.thechefsburger.com.br/webservices/pedidos.php?json='+JSON.stringify({
       produtos:       globalState.usuario.pedido.items,
       nome:           globalState.usuario.pedido.entrega.nome,
       telefone:       globalState.usuario.pedido.entrega.celular,
